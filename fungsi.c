@@ -1,77 +1,108 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include "header.h"
 
-// =================================================   
-// 1. DEFINISI STRUKTUR DATA
-// =================================================
-
-typedef struct PasienNode {
-    long long nik;
-    char nama[50];
-    char alamat[100];
-    int urgensi;           // 1: Darurat, 2: Mendesak, 3: Biasa
-    time_t waktu_periksa;
-    char diagnosa[500];
-    struct PasienNode *left, *right;
-} PasienNode;
-
-typedef struct QueueNode {
-    PasienNode *data;
-    struct QueueNode *next;
-} QueueNode;
-
-typedef struct StackNode {
-    char teks_diagnosa[500];
-    struct StackNode *next;
-} StackNode;
-
-typedef struct {
-    char riwayat[10][200];
-    int head;
-    int count;
-} CircularLog;
-
-// Pointer Global
-PasienNode *rootBST = NULL;
+// Alokasi memori aktual untuk pointer global
+PasienNode *rootAVL = NULL;
 QueueNode *headQueue = NULL;
 CircularLog logSistem = { .head = 0, .count = 0 };
 int totalPasien = 0;
 
 // =================================================
-// 2. FUNGSI DATABASE & PENCARIAN DETAIL
+// HELPER & UTALITAS AVL TREE
 // =================================================
+int max(int a, int b) { return (a > b) ? a : b; }
 
-PasienNode* createPasien(long long nik, char nama[], char alamat[], int urgensi, int manual) {
+int getHeight(PasienNode* n) {
+    if (n == NULL) return 0;
+    return n->height;
+}
+
+int getBalance(PasienNode* n) {
+    if (n == NULL) return 0;
+    return getHeight(n->left) - getHeight(n->right);
+}
+
+PasienNode* rightRotate(PasienNode* y) {
+    PasienNode* x = y->left;
+    PasienNode* T2 = x->right;
+    x->right = y;
+    y->left = T2;
+    y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
+    x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
+    return x;
+}
+
+PasienNode* leftRotate(PasienNode* x) {
+    PasienNode* y = x->right;
+    PasienNode* T2 = y->left;
+    y->left = x;
+    x->right = T2;
+    x->height = max(getHeight(x->left), getHeight(x->right)) + 1;
+    y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
+    return y;
+}
+
+// =================================================
+// FUNGSI DATABASE (AVL) & PENCARIAN
+// =================================================
+PasienNode* createPasien(long long nik, char nama[], char alamat[], int urgensi, time_t waktu, char diagnosa[]) {
     PasienNode *newNode = (PasienNode*)malloc(sizeof(PasienNode));
     newNode->nik = nik;
     strcpy(newNode->nama, nama);
     strcpy(newNode->alamat, alamat);
     newNode->urgensi = urgensi;
-    strcpy(newNode->diagnosa, "Belum Diperiksa");
+    
+    if(diagnosa == NULL) strcpy(newNode->diagnosa, "Belum Diperiksa");
+    else strcpy(newNode->diagnosa, diagnosa);
+    
     newNode->left = newNode->right = NULL;
-    newNode->waktu_periksa = time(NULL);
+    newNode->waktu_periksa = (waktu == 0) ? time(NULL) : waktu;
+    newNode->height = 1;
 
     totalPasien++;
     return newNode;
 }
 
-PasienNode* insertBST(PasienNode* root, PasienNode* newNode) {
-    if (root == NULL) return newNode;
-    if (newNode->nik < root->nik) root->left = insertBST(root->left, newNode);
-    else if (newNode->nik > root->nik) root->right = insertBST(root->right, newNode);
-    return root;
+PasienNode* insertAVL(PasienNode* node, PasienNode* newNode) {
+    if (node == NULL) return newNode;
+
+    if (newNode->nik < node->nik) 
+        node->left = insertAVL(node->left, newNode);
+    else if (newNode->nik > node->nik) 
+        node->right = insertAVL(node->right, newNode);
+    else 
+        return node; // NIK duplikat diabaikan
+
+    node->height = 1 + max(getHeight(node->left), getHeight(node->right));
+    int balance = getBalance(node);
+
+    // Kasus Left Left
+    if (balance > 1 && newNode->nik < node->left->nik) return rightRotate(node);
+    // Kasus Right Right
+    if (balance < -1 && newNode->nik > node->right->nik) return leftRotate(node);
+    // Kasus Left Right
+    if (balance > 1 && newNode->nik > node->left->nik) {
+        node->left = leftRotate(node->left);
+        return rightRotate(node);
+    }
+    // Kasus Right Left
+    if (balance < -1 && newNode->nik < node->right->nik) {
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
+    }
+    return node;
 }
 
-PasienNode* searchBST(PasienNode* root, long long nik) {
+PasienNode* searchAVL(PasienNode* root, long long nik) {
     if (root == NULL || root->nik == nik) return root;
-    if (nik < root->nik) return searchBST(root->left, nik);
-    return searchBST(root->right, nik);
+    if (nik < root->nik) return searchAVL(root->left, nik);
+    return searchAVL(root->right, nik);
 }
 
 void cariDanTampilkanPasien(long long nik) {
-    PasienNode* p = searchBST(rootBST, nik);
+    PasienNode* p = searchAVL(rootAVL, nik);
     if (p == NULL) {
         printf("\n[!] Pasien dengan NIK %lld tidak ditemukan.\n", nik);
     } else {
@@ -88,9 +119,8 @@ void cariDanTampilkanPasien(long long nik) {
 }
 
 // =================================================
-// 3. LOGIKA ANTREAN PRIORITAS STABIL (STABLE SORT)
+// LOGIKA ANTREAN PRIORITAS STABIL (SELECTION SORT)
 // =================================================
-
 void enqueue(PasienNode* pasien) {
     QueueNode* newNode = (QueueNode*)malloc(sizeof(QueueNode));
     newNode->data = pasien;
@@ -128,7 +158,7 @@ void updateStatusPasien() {
     int statusBaru;
     printf("Masukkan NIK pasien untuk update status: ");
     scanf("%lld", &n);
-    PasienNode* p = searchBST(rootBST, n);
+    PasienNode* p = searchAVL(rootAVL, n);
     if (p) {
         printf("Ditemukan: %s | Status Sekarang: %d\n", p->nama, p->urgensi);
         printf("Pilih Status Baru (1: Darurat, 2: Mendesak, 3: Biasa): ");
@@ -140,9 +170,8 @@ void updateStatusPasien() {
 }
 
 // =================================================
-// 4. RUANG PERIKSA & SISTEM UNDO
+// RUANG PERIKSA & SISTEM UNDO (STACK)
 // =================================================
-
 void pushUndo(StackNode** top, char teks[]) {
     StackNode* newNode = (StackNode*)malloc(sizeof(StackNode));
     strcpy(newNode->teks_diagnosa, teks);
@@ -159,39 +188,63 @@ void addLog(PasienNode* p) {
 
 void prosesPeriksa() {
     if (headQueue == NULL) {
-        printf("Antrean kosong!\n");
+        printf("\n[!] Antrean kosong! Tidak ada pasien untuk diperiksa.\n");
         return;
     }
     PasienNode* p = headQueue->data;
     StackNode* undoStack = NULL;
     char input[500];
-    printf("\n--- PEMERIKSAAN: %s ---\n", p->nama);
+    
+    printf("\n--- PEMERIKSAAN PASIEN ---\n");
+    printf("Nama: %s\n", p->nama);
+    printf("NIK : %lld\n", p->nik);
+    
     while (1) {
-        printf("Input Diagnosa (undo/fix): ");
+        printf("Input Diagnosa (ketik 'undo' untuk batalkan, 'fix' jika selesai): ");
         scanf(" %[^\n]s", input);
-        if (strcmp(input, "fix") == 0) break;
-        if (strcmp(input, "undo") == 0) {
+        
+        if (strcmp(input, "fix") == 0) {
+            break;
+        } else if (strcmp(input, "undo") == 0) {
             if (undoStack) {
                 StackNode* temp = undoStack;
                 undoStack = undoStack->next;
                 free(temp);
-                printf("[Undo Berhasil]\n");
+                
+                // Kembalikan ke teks diagnosa sebelumnya di stack jika ada
+                if (undoStack) strcpy(p->diagnosa, undoStack->teks_diagnosa);
+                else strcpy(p->diagnosa, "Belum Diperiksa");
+                
+                printf("[Undo Berhasil! Diagnosa saat ini: %s]\n", p->diagnosa);
+            } else {
+                printf("[!] Tidak ada riwayat input untuk di-undo.\n");
             }
         } else {
             pushUndo(&undoStack, input);
             strcpy(p->diagnosa, input); 
         }
     } 
+    
     addLog(p);
+    simpanDatabase(); // Auto-save ke file setiap kali selesai periksa
+    
+    // Dequeue pasien yang sudah diperiksa
     QueueNode* tempQ = headQueue;
     headQueue = headQueue->next;
     free(tempQ);
+    
+    // Free sisa undo stack
+    while(undoStack != NULL) {
+        StackNode* t = undoStack;
+        undoStack = undoStack->next;
+        free(t);
+    }
+    printf("Pemeriksaan selesai. Data berhasil disimpan!\n");
 }
 
 // =================================================
-// 5. PELAPORAN (MERGE SORT & PAGINATION)
+// PELAPORAN (MERGE SORT)
 // =================================================
-
 void kumpulData(PasienNode* root, PasienNode** arr, int* index) {
     if (root == NULL) return;
     kumpulData(root->left, arr, index);
@@ -201,9 +254,12 @@ void kumpulData(PasienNode* root, PasienNode** arr, int* index) {
 
 void merge(PasienNode** arr, int l, int m, int r) {
     int n1 = m - l + 1, n2 = r - m;
-    PasienNode **L = malloc(n1 * sizeof(PasienNode*)), **R = malloc(n2 * sizeof(PasienNode*));
+    PasienNode **L = malloc(n1 * sizeof(PasienNode*));
+    PasienNode **R = malloc(n2 * sizeof(PasienNode*));
+    
     for (int i = 0; i < n1; i++) L[i] = arr[l + i];
     for (int j = 0; j < n2; j++) R[j] = arr[m + 1 + j];
+    
     int i = 0, j = 0, k = l;
     while (i < n1 && j < n2) {
         if (L[i]->waktu_periksa <= R[j]->waktu_periksa) arr[k++] = L[i++];
@@ -217,27 +273,78 @@ void merge(PasienNode** arr, int l, int m, int r) {
 void mergeSort(PasienNode** arr, int l, int r) {
     if (l < r) {
         int m = l + (r - l) / 2;
-        mergeSort(arr, l, m); mergeSort(arr, m + 1, r); merge(arr, l, m, r);
+        mergeSort(arr, l, m); 
+        mergeSort(arr, m + 1, r); 
+        merge(arr, l, m, r);
     }
 }
 
 void tampilkanLaporan() {
-    if (totalPasien == 0) { printf("\n[!] Belum ada data.\n"); return; }
+    if (totalPasien == 0) { printf("\n[!] Belum ada data rekam medis.\n"); return; }
     PasienNode** arr = malloc(totalPasien * sizeof(PasienNode*));
-    int index = 0; kumpulData(rootBST, arr, &index);
+    int index = 0; 
+    kumpulData(rootAVL, arr, &index);
     mergeSort(arr, 0, totalPasien - 1);
+    
     int hal = 1, totalHal = (totalPasien + 9) / 10;
     char nav;
     do {
         printf("\n--- LAPORAN REKAM MEDIS (Hal %d/%d) ---\n", hal, totalHal);
         printf("%-15s | %-15s | %-12s | %-15s\n", "NIK", "NAMA", "TANGGAL", "DIAGNOSA");
+        printf("------------------------------------------------------------------\n");
         for (int i = (hal - 1) * 10; i < hal * 10 && i < totalPasien; i++) {
             struct tm *t = localtime(&arr[i]->waktu_periksa);
-            printf("%-15lld | %-15s | %02d/%02d/%d   | %-15s\n", arr[i]->nik, arr[i]->nama, t->tm_mday, t->tm_mon+1, t->tm_year+1900, arr[i]->diagnosa);
+            printf("%-15lld | %-15s | %02d/%02d/%d    | %-15s\n", 
+                   arr[i]->nik, arr[i]->nama, t->tm_mday, t->tm_mon+1, t->tm_year+1900, arr[i]->diagnosa);
         }
-        printf("Navigasi: [n] Next, [p] Prev, [q] Keluar: "); scanf(" %c", &nav);
-        if (nav == 'n' && hal < totalHal) hal++; else if (nav == 'p' && hal > 1) hal--;
+        printf("Navigasi: [n] Next, [p] Prev, [q] Kembali: "); 
+        scanf(" %c", &nav);
+        if (nav == 'n' && hal < totalHal) hal++; 
+        else if (nav == 'p' && hal > 1) hal--;
     } while (nav != 'q');
     free(arr);
 }
 
+// =================================================
+// SYSTEM PENYIMPANAN DATA (DATABASE FILE)
+// =================================================
+void simpanKeFile(PasienNode* root, FILE* file) {
+    if (root == NULL) return;
+    // Tulis data terformat ke database.txt
+    fprintf(file, "%lld;%s;%s;%d;%ld;%s\n", 
+            root->nik, root->nama, root->alamat, root->urgensi, (long)root->waktu_periksa, root->diagnosa);
+    simpanKeFile(root->left, file);
+    simpanKeFile(root->right, file);
+}
+
+void simpanDatabase() {
+    FILE* file = fopen("database.txt", "w");
+    if (file == NULL) {
+        printf("[!] Gagal menyimpan database.\n");
+        return;
+    }
+    simpanKeFile(rootAVL, file);
+    fclose(file);
+}
+
+void loadDatabase() {
+    FILE* file = fopen("database.txt", "r");
+    if (file == NULL) return; 
+    
+    long long nik;
+    char nama[50], alamat[100], diagnosa[500];
+    int urgensi;
+    long waktu;
+    
+    // PERBAIKAN: Tambahkan % sebelum [^;] agar format terbaca benar
+    while (fscanf(file, "%lld;%[^;];%[^;];%d;%ld;%[^\n]\n", &nik, nama, alamat, &urgensi, &waktu, diagnosa) != EOF) {
+        PasienNode* baru = createPasien(nik, nama, alamat, urgensi, (time_t)waktu, diagnosa);
+        rootAVL = insertAVL(rootAVL, baru);
+        
+        if(strcmp(diagnosa, "Belum Diperiksa") == 0) {
+            enqueue(baru);
+        }
+    }
+    stablePrioritySort();
+    fclose(file);
+}
