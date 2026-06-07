@@ -1,5 +1,5 @@
 cara jalankan pakai make file  kalo pake windows: mingw32-make run
-kalo pake linux : 
+kalo pake linux : make run
 
 
 
