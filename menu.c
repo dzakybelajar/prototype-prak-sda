@@ -38,7 +38,14 @@ void menuResepsionis() {
 
         switch (pilihan) {
             case 1:
-                printf("NIK: "); scanf("%lld", &n);
+                do {
+                    n = 0;
+                    printf("NIK: "); 
+                    scanf("%lld", &n);
+                    while(getchar()!='\n');
+                    if (n == 0)
+                    { printf("NIK tidak valid!\n"); }
+                }while(n == 0);
                 // Validasi Cek NIK ganda di AVL
                 if(searchAVL(rootAVL, n) != NULL) {
                     printf("[!] NIK sudah terdaftar di sistem!\n");
@@ -56,7 +63,14 @@ void menuResepsionis() {
                 printf("Berhasil terdaftar dan masuk antrean!\n");
                 break;
             case 2:
-                printf("Masukkan NIK: "); scanf("%lld", &n);
+                do {
+                    n = 0;
+                    printf("NIK: "); 
+                    scanf("%lld", &n);
+                    while(getchar()!='\n');
+                    if (n == 0)
+                    { printf("NIK tidak valid!\n"); }
+                }while(n == 0);
                 cariDanTampilkanPasien(n);
                 break;
             case 3:
@@ -65,6 +79,8 @@ void menuResepsionis() {
                 break;
             case 4:
                 return;
+            default:
+                printf("Pilihan tidak valid!\n");
         }
     }
 }
@@ -100,6 +116,8 @@ void menuDokter() {
                 break;
             case 4:
                 return;
+            default:
+                printf("Pilihan tidak valid!\n");
         }
     }
 }
