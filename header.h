@@ -1,10 +1,6 @@
 #ifndef HEADER_H
 #define HEADER_H
-
 #include <time.h>
-
-
-
 typedef struct PasienNode {
     long long nik;
     char nama[50];

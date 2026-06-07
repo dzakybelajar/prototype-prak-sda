@@ -9,7 +9,6 @@ QueueNode *headQueue = NULL;
 CircularLog logSistem = { .head = 0, .count = 0 };
 int totalPasien = 0;
 
-
 int max(int a, int b) { return (a > b) ? a : b; }
 
 int getHeight(PasienNode* n) {
@@ -41,7 +40,6 @@ PasienNode* leftRotate(PasienNode* x) {
     y->height = max(getHeight(y->left), getHeight(y->right)) + 1;
     return y;
 }
-
 
 PasienNode* createPasien(long long nik, char nama[], char alamat[], int urgensi, time_t waktu, char diagnosa[]) {
     PasienNode *newNode = (PasienNode*)malloc(sizeof(PasienNode));
@@ -113,7 +111,6 @@ void cariDanTampilkanPasien(long long nik) {
     }
 }
 
-
 void enqueue(PasienNode* pasien) {
     QueueNode* newNode = (QueueNode*)malloc(sizeof(QueueNode));
     newNode->data = pasien;
@@ -161,7 +158,6 @@ void updateStatusPasien() {
         printf("Status berhasil diperbarui dan posisi antrean disesuaikan!\n");
     } else printf("Pasien tidak ditemukan!\n");
 }
-
 
 void pushUndo(StackNode** top, char teks[]) {
     StackNode* newNode = (StackNode*)malloc(sizeof(StackNode));
@@ -233,7 +229,6 @@ void prosesPeriksa() {
     printf("Pemeriksaan selesai. Data berhasil disimpan!\n");
 }
 
-
 void kumpulData(PasienNode* root, PasienNode** arr, int* index) {
     if (root == NULL) return;
     kumpulData(root->left, arr, index);
@@ -293,7 +288,6 @@ void tampilkanLaporan() {
     } while (nav != 'q');
     free(arr);
 }
-
 
 void simpanKeFile(PasienNode* root, FILE* file) {
     if (root == NULL) return;
