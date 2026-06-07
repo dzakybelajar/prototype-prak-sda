@@ -1,15 +1,15 @@
 # Variabel untuk compiler dan file
 CC = gcc
 SRC = menu.c fungsi.c
-TARGET = program_sementara
+TARGET = program_sementara.exe
 
 # Target utama: compile, jalankan, lalu otomatis hapus file .exe
 run:
-	@echo "Komputasi dan menjalankan program..."
+	@echo "Mengompilasi dan menjalankan program..."
 	@$(CC) $(SRC) -o $(TARGET)
-	@./$(TARGET)
-	@rm -f $(TARGET).exe
+	@.\$(TARGET)
+	@del /f /q $(TARGET)
 
-# Target opsional jika ingin menghapus manual (jika program error di tengah jalan)
+# Target untuk hapus manual jika sewaktu-waktu program hang/crash sebelum sempat terhapus
 clean:
-	@rm -f $(TARGET).exe
+	@del /f /q $(TARGET)
