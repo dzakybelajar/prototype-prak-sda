@@ -2,7 +2,6 @@
 #include <string.h>
 #include "header.h"
 
-
 int login(int role) {
     char username[20];
     char password[20];
@@ -53,7 +52,14 @@ void menuResepsionis() {
                 }
                 printf("Nama: "); scanf(" %[^\n]s", nm);
                 printf("Alamat: "); scanf(" %[^\n]s", alm);
-                printf("Urgensi (1:Darurat, 2:Mendesak, 3:Biasa): "); scanf("%d", &urg);
+                do {
+                    urg = 0;
+                    printf("Urgensi (1:Darurat, 2:Mendesak, 3:Biasa): "); 
+                    scanf("%d", &urg);
+                    while(getchar()!='\n');
+                    if (urg == 0)
+                    { printf("NIK tidak valid!\n"); }
+                }while(urg == 0);
                 
                 PasienNode* baru = createPasien(n, nm, alm, urg, 0, NULL);
                 rootAVL = insertAVL(rootAVL, baru);
