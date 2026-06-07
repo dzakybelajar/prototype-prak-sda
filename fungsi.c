@@ -152,8 +152,6 @@ void stablePrioritySort() {
                 prevData = temp;                  
                 curr = nextNode;                  
             }
-            
-            
             i->data = minData;
         }
     }
@@ -167,8 +165,12 @@ void updateStatusPasien() {
     PasienNode* p = searchAVL(rootAVL, n);
     if (p) {
         printf("Ditemukan: %s | Status Sekarang: %d\n", p->nama, p->urgensi);
-        printf("Pilih Status Baru (1: Darurat, 2: Mendesak, 3: Biasa): ");
-        scanf("%d", &statusBaru);
+        do{
+            statusBaru = 0;
+            printf("Pilih Status Baru (1: Darurat, 2: Mendesak, 3: Biasa): ");
+            scanf("%d", &statusBaru);
+            while(getchar()!='\n');
+        }while(statusBaru == 0);
         p->urgensi = statusBaru;
         stablePrioritySort();
         printf("Status berhasil diperbarui dan posisi antrean disesuaikan!\n");
@@ -301,6 +303,8 @@ void tampilkanLaporan() {
         scanf(" %c", &nav);
         if (nav == 'n' && hal < totalHal) hal++; 
         else if (nav == 'p' && hal > 1) hal--;
+        else
+        { printf("input tidak valid!\n"); }
     } while (nav != 'q');
     free(arr);
 }
