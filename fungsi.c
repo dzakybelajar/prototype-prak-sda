@@ -126,20 +126,36 @@ void enqueue(PasienNode* pasien) {
 
 void stablePrioritySort() {
     if (!headQueue || !headQueue->next) return;
+    
     for (QueueNode* i = headQueue; i != NULL; i = i->next) {
         QueueNode* minNode = i;
+        
         for (QueueNode* j = i->next; j != NULL; j = j->next) {
             if (j->data->urgensi < minNode->data->urgensi) {
                 minNode = j;
-            } else if (j->data->urgensi == minNode->data->urgensi) {
+            } 
+            else if (j->data->urgensi == minNode->data->urgensi) {
                 if (j->data->waktu_periksa < minNode->data->waktu_periksa) {
                     minNode = j;
                 }
             }
         }
-        PasienNode* temp = i->data;
-        i->data = minNode->data;
-        minNode->data = temp;
+        if (minNode != i) {
+            PasienNode* minData = minNode->data; 
+            QueueNode* curr = i;
+            PasienNode* prevData = curr->data;
+            
+            while (curr != minNode) {
+                QueueNode* nextNode = curr->next;
+                PasienNode* temp = nextNode->data; 
+                nextNode->data = prevData;         
+                prevData = temp;                  
+                curr = nextNode;                  
+            }
+            
+            
+            i->data = minData;
+        }
     }
 }
 
