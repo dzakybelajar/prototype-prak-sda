@@ -170,7 +170,7 @@ void updateStatusPasien() {
             printf("Pilih Status Baru (1: Darurat, 2: Mendesak, 3: Biasa): ");
             scanf("%d", &statusBaru);
             while(getchar()!='\n');
-        }while(statusBaru == 0);
+        }while(statusBaru <= 0 || statusBaru > 3);
         p->urgensi = statusBaru;
         stablePrioritySort();
         printf("Status berhasil diperbarui dan posisi antrean disesuaikan!\n");

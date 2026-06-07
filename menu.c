@@ -59,7 +59,7 @@ void menuResepsionis() {
                     while(getchar()!='\n');
                     if (urg == 0)
                     { printf("NIK tidak valid!\n"); }
-                }while(urg == 0);
+                }while(urg <= 0 || urg > 3);
                 
                 PasienNode* baru = createPasien(n, nm, alm, urg, 0, NULL);
                 rootAVL = insertAVL(rootAVL, baru);
