@@ -34,7 +34,7 @@ void menuResepsionis() {
         printf("4. Logout\n");
         printf("Pilih: "); 
         scanf("%d", &pilihan);
-        while(getchar()!="\n");
+        while(getchar()!='\n');
 
         switch (pilihan) {
             case 1:
@@ -80,7 +80,7 @@ void menuDokter() {
         printf("4. Logout\n");
         printf("Pilih: "); 
         scanf("%d", &pilihan);
-        while(getchar()!="\n");
+        while(getchar()!='\n');
 
         switch (pilihan) {
             case 1:
@@ -114,7 +114,7 @@ void menuUtama() {
         printf("3. Keluar Aplikasi\n");
         printf("Pilih Akses: "); 
         scanf("%d", &pilihan);
-        while(getchar()!="\n");
+        while(getchar()!='\n');
 
         switch (pilihan) {
             case 1:
