@@ -9,9 +9,7 @@ QueueNode *headQueue = NULL;
 CircularLog logSistem = { .head = 0, .count = 0 };
 int totalPasien = 0;
 
-// =================================================
-// HELPER & UTALITAS AVL TREE
-// =================================================
+
 int max(int a, int b) { return (a > b) ? a : b; }
 
 int getHeight(PasienNode* n) {
@@ -44,9 +42,7 @@ PasienNode* leftRotate(PasienNode* x) {
     return y;
 }
 
-// =================================================
-// FUNGSI DATABASE (AVL) & PENCARIAN
-// =================================================
+
 PasienNode* createPasien(long long nik, char nama[], char alamat[], int urgensi, time_t waktu, char diagnosa[]) {
     PasienNode *newNode = (PasienNode*)malloc(sizeof(PasienNode));
     newNode->nik = nik;
@@ -118,9 +114,7 @@ void cariDanTampilkanPasien(long long nik) {
     }
 }
 
-// =================================================
-// LOGIKA ANTREAN PRIORITAS STABIL (SELECTION SORT)
-// =================================================
+
 void enqueue(PasienNode* pasien) {
     QueueNode* newNode = (QueueNode*)malloc(sizeof(QueueNode));
     newNode->data = pasien;
@@ -169,9 +163,7 @@ void updateStatusPasien() {
     } else printf("Pasien tidak ditemukan!\n");
 }
 
-// =================================================
-// RUANG PERIKSA & SISTEM UNDO (STACK)
-// =================================================
+
 void pushUndo(StackNode** top, char teks[]) {
     StackNode* newNode = (StackNode*)malloc(sizeof(StackNode));
     strcpy(newNode->teks_diagnosa, teks);
@@ -242,9 +234,7 @@ void prosesPeriksa() {
     printf("Pemeriksaan selesai. Data berhasil disimpan!\n");
 }
 
-// =================================================
-// PELAPORAN (MERGE SORT)
-// =================================================
+
 void kumpulData(PasienNode* root, PasienNode** arr, int* index) {
     if (root == NULL) return;
     kumpulData(root->left, arr, index);
@@ -305,9 +295,7 @@ void tampilkanLaporan() {
     free(arr);
 }
 
-// =================================================
-// SYSTEM PENYIMPANAN DATA (DATABASE FILE)
-// =================================================
+
 void simpanKeFile(PasienNode* root, FILE* file) {
     if (root == NULL) return;
     // Tulis data terformat ke database.txt
