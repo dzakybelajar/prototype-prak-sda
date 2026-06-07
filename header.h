@@ -3,9 +3,7 @@
 
 #include <time.h>
 
-// ================================================= 
-// 1. DEFINISI STRUKTUR DATA (AVL Tree, Queue, Stack, Circular)
-// =================================================
+
 
 typedef struct PasienNode {
     long long nik;
@@ -40,10 +38,7 @@ extern QueueNode *headQueue;
 extern CircularLog logSistem;
 extern int totalPasien;
 
-// =================================================
-// 2. DEKLARASI FUNGSI
-// =================================================
-void menuUtama();
+
 void menuResepsionis();
 void menuDokter();
 int login(int role); // 1: Resepsionis, 2: Dokter
