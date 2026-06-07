@@ -26,16 +26,13 @@ void menuResepsionis() {
     char nm[50], alm[100];
     
     while (1) {
-        pilihan = 0;
         printf("\n=== PORTAL RESEPSIONIS ===\n");
         printf("1. Registrasi Pasien Baru (Auto-Queue)\n");
         printf("2. Cari Detail Pasien (via NIK)\n");
         printf("3. Update Status Urgensi Antrean\n");
         printf("4. Logout\n");
-        printf("Pilih: "); 
-        scanf("%d", &pilihan);
-        while(getchar != "\n");
-
+        printf("Pilih: "); scanf("%d", &pilihan);
+        
         switch (pilihan) {
             case 1:
                 printf("NIK: "); scanf("%lld", &n);
@@ -72,16 +69,13 @@ void menuResepsionis() {
 void menuDokter() {
     int pilihan;
     while (1) {
-        pilihan = 0;
         printf("\n=== PORTAL DOKTER ===\n");
         printf("1. Periksa Pasien Terdepan (Undo Stack)\n");
         printf("2. Riwayat Aktivitas Log (Circular Log)\n");
         printf("3. Cetak Seluruh Laporan Rekam Medis (Merge Sort)\n");
         printf("4. Logout\n");
-        printf("Pilih: "); 
-        scanf("%d", &pilihan);
-        while(getchar() != "\n");
-
+        printf("Pilih: "); scanf("%d", &pilihan);
+        
         switch (pilihan) {
             case 1:
                 prosesPeriksa();
@@ -107,15 +101,12 @@ void menuDokter() {
 void menuUtama() {
     int pilihan;
     while (1) {
-        pilihan = 0;
         printf("\n=== MEDTRACK PRO - FINAL SYSTEM ===\n");
         printf("1. Masuk Sebagai Resepsionis\n");
         printf("2. Masuk Sebagai Dokter\n");
         printf("3. Keluar Aplikasi\n");
-        printf("Pilih Akses: "); 
-        scanf("%d", &pilihan);
-        while(getchar() != "\n");
-
+        printf("Pilih Akses: "); scanf("%d", &pilihan);
+        
         switch (pilihan) {
             case 1:
                 if (login(1)) menuResepsionis();
