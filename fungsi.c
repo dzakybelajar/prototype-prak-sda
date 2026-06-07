@@ -69,21 +69,20 @@ PasienNode* insertAVL(PasienNode* node, PasienNode* newNode) {
     else if (newNode->nik > node->nik) 
         node->right = insertAVL(node->right, newNode);
     else 
-        return node; // NIK duplikat diabaikan
+        return node; 
 
     node->height = 1 + max(getHeight(node->left), getHeight(node->right));
     int balance = getBalance(node);
 
-    // Kasus Left Left
     if (balance > 1 && newNode->nik < node->left->nik) return rightRotate(node);
-    // Kasus Right Right
+    
     if (balance < -1 && newNode->nik > node->right->nik) return leftRotate(node);
-    // Kasus Left Right
+    
     if (balance > 1 && newNode->nik > node->left->nik) {
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
-    // Kasus Right Left
+    
     if (balance < -1 && newNode->nik < node->right->nik) {
         node->right = rightRotate(node->right);
         return leftRotate(node);
@@ -324,7 +323,6 @@ void loadDatabase() {
     int urgensi;
     long waktu;
     
-    // PERBAIKAN: Tambahkan % sebelum [^;] agar format terbaca benar
     while (fscanf(file, "%lld;%[^;];%[^;];%d;%ld;%[^\n]\n", &nik, nama, alamat, &urgensi, &waktu, diagnosa) != EOF) {
         PasienNode* baru = createPasien(nik, nama, alamat, urgensi, (time_t)waktu, diagnosa);
         rootAVL = insertAVL(rootAVL, baru);

@@ -2,7 +2,7 @@
 #include <string.h>
 #include "header.h"
 
-// Hardcoded Kredensial Akun Login
+
 int login(int role) {
     char username[20];
     char password[20];

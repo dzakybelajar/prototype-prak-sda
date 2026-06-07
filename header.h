@@ -32,7 +32,7 @@ typedef struct {
     int count;
 } CircularLog;
 
-// Pointer Global (Menggunakan extern untuk mencegah duplikasi link error)
+// Pointer Global
 extern PasienNode *rootAVL;
 extern QueueNode *headQueue;
 extern CircularLog logSistem;
