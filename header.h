@@ -34,7 +34,6 @@ extern QueueNode *headQueue;
 extern CircularLog logSistem;
 extern int totalPasien;
 
-
 void menuResepsionis();
 void menuDokter();
 int login(int role); // 1: Resepsionis, 2: Dokter
