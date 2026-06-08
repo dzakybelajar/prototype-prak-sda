@@ -359,3 +359,18 @@ void loadDatabase() {
     stablePrioritySort();
     fclose(file);
 }
+
+void bersihkanAVL(PasienNode* root) {
+    if (root == NULL) return;
+    bersihkanAVL(root->left);
+    bersihkanAVL(root->right);
+    free(root); 
+}
+
+void bersihkanQueue() {
+    while (headQueue != NULL) {
+        QueueNode* temp = headQueue;
+        headQueue = headQueue->next;
+        free(temp);
+    }
+}

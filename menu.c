@@ -149,6 +149,9 @@ void menuUtama() {
                 break;
             case 3:
                 simpanDatabase(); // Pastikan data terselamatkan sebelum keluar
+                bersihkanQueue();
+                bersihkanAVL(rootAVL);
+    rootAVL = NULL; // Reset pointer untuk keamanan
                 printf("Terima kasih telah menggunakan MedTrack Pro.\n");
                 return;
             default:
