@@ -217,7 +217,9 @@ void prosesPeriksa() {
         scanf(" %[^\n]s", input);
         
         if (strcmp(input, "fix") == 0) {
-            break;
+            if (undoStack) 
+            { printf("Diagnosa berhasil diinput!\n"); break; }
+            else printf("Diagnosa belum diinput!\n");
         } else if (strcmp(input, "undo") == 0) {
             if (undoStack) {
                 StackNode* temp = undoStack;
