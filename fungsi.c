@@ -323,7 +323,7 @@ void tampilkanLaporan() {
 void simpanKeFile(PasienNode* root, FILE* file) {
     if (root == NULL) return;
     // Tulis data terformat ke database.txt
-    fprintf(file, "%lld;%s;%s;%d;%ld;%s\n", 
+    fprintf(file, "%lld|%s|%s|%d|%ld|%s\n", 
             root->nik, root->nama, root->alamat, root->urgensi, (long)root->waktu_periksa, root->diagnosa);
     simpanKeFile(root->left, file);
     simpanKeFile(root->right, file);
