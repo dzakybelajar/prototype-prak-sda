@@ -170,6 +170,8 @@ void updateStatusPasien() {
             printf("Pilih Status Baru (1: Darurat, 2: Mendesak, 3: Biasa): ");
             scanf("%d", &statusBaru);
             while(getchar()!='\n');
+            if (statusBaru <= 0 || statusBaru > 3)
+            { printf("Input tidak valid!\n"); }
         }while(statusBaru <= 0 || statusBaru > 3);
         p->urgensi = statusBaru;
         stablePrioritySort();
@@ -303,8 +305,9 @@ void tampilkanLaporan() {
         scanf(" %c", &nav);
         if (nav == 'n' && hal < totalHal) hal++; 
         else if (nav == 'p' && hal > 1) hal--;
-        else
+        else if (nav != 'n' && nav != 'p' && nav != 'q')
         { printf("input tidak valid!\n"); }
+        while(getchar()!='\n');
     } while (nav != 'q');
     free(arr);
 }

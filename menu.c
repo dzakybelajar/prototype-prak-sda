@@ -57,8 +57,8 @@ void menuResepsionis() {
                     printf("Urgensi (1:Darurat, 2:Mendesak, 3:Biasa): "); 
                     scanf("%d", &urg);
                     while(getchar()!='\n');
-                    if (urg == 0)
-                    { printf("NIK tidak valid!\n"); }
+                    if (urg == 0 || urg > 3)
+                    { printf("Input tidak valid!\n"); }
                 }while(urg <= 0 || urg > 3);
                 
                 PasienNode* baru = createPasien(n, nm, alm, urg, 0, NULL);
