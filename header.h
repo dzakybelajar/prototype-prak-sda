@@ -70,7 +70,6 @@ void simpanKeFile(PasienNode* root, FILE* file);
 void simpanDatabase();
 void loadDatabase();
 
-
 void bersihkanAVL(PasienNode* root);
 void bersihkanQueue();
 
