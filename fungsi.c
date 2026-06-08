@@ -160,8 +160,14 @@ void stablePrioritySort() {
 void updateStatusPasien() {
     long long n;
     int statusBaru;
-    printf("Masukkan NIK pasien untuk update status: ");
-    scanf("%lld", &n);
+     do{
+            n = 0;
+            printf("Masukkan NIK pasien untuk update status: ");
+            scanf("%lld", &n);
+            while(getchar()!='\n');
+            if (n <= 0)
+            { printf("NIK tidak valid!\n"); }
+        }while(n <= 0);
     PasienNode* p = searchAVL(rootAVL, n);
     if (p) {
         printf("Ditemukan: %s | Status Sekarang: %d\n", p->nama, p->urgensi);
