@@ -348,7 +348,7 @@ void loadDatabase() {
     int urgensi;
     long waktu;
     
-    while (fscanf(file, "%lld;%[^|];%[^|];%d;%ld;%[^\n]\n", &nik, nama, alamat, &urgensi, &waktu, diagnosa) != EOF) {
+    while (fscanf(file, "%lld|%[^|]|%[^|]|%d|%ld|%[^\n]\n", &nik, nama, alamat, &urgensi, &waktu, diagnosa) != EOF) {
         PasienNode* baru = createPasien(nik, nama, alamat, urgensi, (time_t)waktu, diagnosa);
         rootAVL = insertAVL(rootAVL, baru);
         
