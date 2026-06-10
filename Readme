@@ -9,10 +9,31 @@ selction sort dan juga merge sort untuk laporan real-time.
 Proyek ini dikembangkan sebagai bagian dari Ujian Akhir Semester Praktikum
 Struktur Data dan Algoritma.
 
+## Struktur Data dan Algoritma yang Diimplementasikan
+
+### Struktur Data
+-------------------------------------------------------------------------------
+|  Struktur Data  |                     Digunakan Untuk                       |
+|-----------------|-----------------------------------------------------------|
+| AVL Tree        | Menyimpan data pasien agar data pasien lebih mudah dicari |
+| Stack           | fitur undo pada bagian periksa pasien                     |
+| Queue           | Manajemen antrean pasien berdasarkan urgensi              |
+| Circular Buffer | 10 riwayat data terkahir pasien                           |
+-------------------------------------------------------------------------------
+
+### Algoritma
+--------------------------------------------------------------------------------------------
+| Algoritma         | Kompleksitas |                Digunakan untuk                        |
+|-------------------|--------------|-------------------------------------------------------|
+| Merge sort        | O(n log n)   | menyorting data pasien untuk menu laporan             |
+| Binary Search     | O(log n)     | Pencarian detail data Pasien                          |
+| Selection sort    | O(n^2)       | Menstabilkan antrean pasien menurut tingkatan urgensi |
+| Inorder Traversal | O(n)         | Mengumpulkan data pasien berdasarkan NIK              |
+--------------------------------------------------------------------------------------------
+
 ## Cara Menjalankan Program
 
 ### Prasyarat
-
 - GCC versi 9.0 atau lebih baru
 - Sistem operasi Linux / macOS / Windows (dengan MinGW)
 
@@ -49,14 +70,14 @@ Pilih:
 
 ## Tim Pengembang
 
-------------------------------------------------------------------
-| Nama                | Kontribusi Utama                         |
-|---------------------|------------------------------------------|
-| M.Dzaky Syraj       | Implementasi Stack dan Queue, menu utama |
-| Hanif Maulana       | Implementasi BST dan Inorder Traversal   |
-| Muhammad Rayyan     | Implementasi Linked List, fungsi sorting |
-| Putri Rahmatul Ulya | Pengujian, dokumentasi README, laporan   |
-| Keisya Zahira       | Pengujian, dokumentasi README, laporan   |
+---------------------------------------------------------------------
+| Nama                | Kontribusi Utama                            |
+|---------------------|---------------------------------------------|
+| M.Dzaky Syraj       | Readme, Implementasi                        |
+| Hanif Maulana       | Implementasi AVL Tree dan Inorder Traversal |
+| Muhammad Rayyan     | Laporan,                                    |
+| Putri Rahmatul Ulya | laporan,                                    |
+| Keisya Zahira       | laporan,                                    |
 ------------------------------------------------------------------
 
 ## Lisensi
