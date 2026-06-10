@@ -37,11 +37,19 @@ Struktur Data dan Algoritma.
 - GCC versi 9.0 atau lebih baru
 - Sistem operasi Linux / macOS / Windows (dengan MinGW)
 
-### Jalankan
-- Jika OS Windows :
-mingw32-make run
-- Jika OS Linux :
-make run
+
+### Kompilasi
+- Kompilasi standar : 
+gcc  fungsi.c main.c -o program_sementara  
+- Jika compile pakai makefile : 
+    * Jika OS Windows : 
+        mingw32-make run
+    * Jika OS Linux :
+        make run
+
+### Jalankan 
+
+./program_sementara   <--- disarankan pakai ini saja karena di makefilenya kami tulis ini.
 
 ## Tampilan Menu Program
 
